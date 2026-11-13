@@ -1,0 +1,18 @@
+# Availability depends on the Ubuntu/Debian release and enabled repositories.
+# Missing packages are reported, never installed from third-party scripts.
+ca-certificates
+curl
+eza
+fzf
+gh
+git
+git-delta
+gum
+lazygit
+lsof
+neovim
+openssh-client
+ripgrep
+starship
+tmux
+zsh

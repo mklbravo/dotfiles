@@ -1,0 +1,156 @@
+# ##############################################################
+# ### General Configuration
+# ##############################################################
+palette = "tokyo_night"
+
+format = """
+[█](lavender)\
+$os\
+[◤](fg:lavender bg:surface2)\
+$username\
+$hostname\
+[◤](fg:surface2 bg:blue)\
+$directory\
+[◤](fg:blue bg:surface2)\
+[◤](fg:surface2 bg:sapphire)\
+$git_branch\
+[◤](fg:sapphire bg:surface2)\
+[◤](fg:surface2 bg:sky)\
+$git_status\
+[◤](fg:sky bg:surface2)\
+[◤](fg:surface2 bg:teal)\
+$docker_context\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+[◤](fg:teal bg:surface2)\
+[◤](fg:surface2 bg:surface1)\
+[◤](fg:surface1 bg:surface0)\
+[◤](fg:surface0 bg:base)\
+$cmd_duration\
+$line_break\
+$character"""
+
+# ##############################################################
+# ### Module Configuration
+# ##############################################################
+[cmd_duration]
+min_time = 2_000
+format = '[](fg:surface1)[ 󰔛 $duration ](bg:surface1 fg:peach)[](fg:surface1)'
+
+[directory]
+before_repo_root_style = "bg:blue fg:surface1 italic"
+format = "[ $path ]($style)"
+repo_root_format = "[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)[$read_only]($read_only_style)"
+repo_root_style = "bg:blue fg:crust bold"
+style = "bg:blue fg:crust bold"
+truncate_to_repo = false
+truncation_length = 4
+truncation_symbol = "…/"
+
+[docker_context]
+format = '[ $symbol ($context) ]($style)'
+style = "bg:teal fg:crust bold"
+symbol = ""
+
+[git_branch]
+format = "[ $symbol $branch ]($style)"
+style = "bg:sapphire fg:crust bold"
+symbol = ""
+
+[git_status]
+ahead = "  ${count}"
+behind = "  ${count}"
+diverged = " 󰧈  ${ahead_count}  ${behind_count}"
+format = "[$all_status$ahead_behind ]($style)"
+modified = "  ${count}"
+staged = "  ${count}"
+stashed = "  ${count}"
+style = "bg:sky fg:crust bold"
+untracked = "  ${count}"
+
+[golang]
+format = '[ $symbol( $version) ]($style)'
+style = "bg:teal fg:crust bold"
+symbol = ""
+
+[hostname]
+ssh_only = true
+format = '[◤](fg:surface2 bg:yellow)[ $ssh_symbol$hostname ](bg:yellow fg:crust bold)[◤](fg:yellow bg:surface2)'
+ssh_symbol = "󰖟 "
+style = "bg:yellow fg:crust bold"
+
+[nodejs]
+format = '[ $symbol( $version) ]($style)'
+style = "bg:teal fg:crust bold"
+symbol = ""
+
+[os]
+disabled = false
+format = "[$symbol ]($style)"
+style = "bg:lavender fg:crust"
+
+[os.symbols]
+Alpine = ""
+Amazon = ""
+Arch = ""
+Debian = ""
+Fedora = ""
+FreeBSD = ""
+Linux = ""
+Macos = ""
+Manjaro = ""
+Mint = "󰣭"
+NixOS = ""
+openSUSE = ""
+Raspbian = ""
+Redhat = ""
+Ubuntu = ""
+Windows = "󰍲"
+
+[php]
+format = '[ $symbol( $version) ]($style)'
+style = "bg:teal fg:crust bold"
+symbol = ""
+
+[username]
+format = '[◤](fg:surface2 bg:teal)[  $user ]($style)[◤](fg:teal bg:surface2)'
+style_root = "bg:teal fg:crust bold"
+style_user = "bg:teal fg:crust bold"
+
+# ##############################################################
+# ### Color Palettes
+# ##############################################################
+[palettes.tokyo_night]
+rosewater = "#f7768e"
+flamingo = "#ff9e64"
+pink = "#bb9af7"
+mauve = "#bb9af7"
+red = "#f7768e"
+maroon = "#db4b4b"
+peach = "#ff9e64"
+yellow = "#e0af68"
+green = "#9ece6a"
+teal = "#73daca"
+sky = "#7dcfff"
+sapphire = "#2ac3de"
+blue = "#7aa2f7"
+lavender = "#bb9af7"
+text = "#c0caf5"
+subtext1 = "#a9b1d6"
+subtext0 = "#9aa5ce"
+overlay2 = "#787c99"
+overlay1 = "#565f89"
+overlay0 = "#414868"
+surface2 = "#3b4261"
+surface1 = "#292e42"
+surface0 = "#24283b"
+base = "#1a1b26"
+mantle = "#16161e"
+crust = "#101014"

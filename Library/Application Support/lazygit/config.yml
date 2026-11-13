@@ -1,0 +1,27 @@
+---
+gui:
+  nerdFontsVersion: "3"
+  # From: https://github.com/catppuccin/lazygit
+  # catppuccin-macciaton green accent
+  theme:
+    activeBorderColor:
+      - '#a6da95'
+      - bold
+    inactiveBorderColor:
+      - '#a5adcb'
+    optionsTextColor:
+      - '#8aadf4'
+    selectedLineBgColor:
+      - '#363a4f'
+    selectedRangeBgColor:
+      - '#363a4f'
+    cherryPickedCommitBgColor:
+      - '#494d64'
+    cherryPickedCommitFgColor:
+      - '#b7bdf8'
+    unstagedChangesColor:
+      - '#ed8796'
+    defaultFgColor:
+      - '#cad3f5'
+    searchingActiveBorderColor:
+      - '#eed49f'

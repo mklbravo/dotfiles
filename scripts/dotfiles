@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
+CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+BACKUP=false
+BACKUP_ROOT=
+
+fail() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 1
+}
+
+usage() {
+    printf '%s\n' \
+        'Usage: ./scripts/dotfiles COMMAND [--backup]' \
+        '' \
+        '  plan                 Show link, package and repository declarations; no changes' \
+        '  check                Check managed links; no changes' \
+        '  link                 Create managed links' \
+        '  packages             Install available CLI packages (no upgrades)' \
+        '  casks                Install optional macOS applications' \
+        '  repositories         Clone missing Git repositories (no updates)' \
+        '  update-repositories  Fast-forward clean managed repositories' \
+        '  install              Link files, install CLI packages, clone repositories' \
+        '' \
+        '--backup is supported by link, repositories and install only.' \
+        'Conflicting destinations are otherwise never replaced.'
+}
+
+detect_platform() {
+    case "$(uname -s)" in
+        Darwin) PLATFORM=macos; MANAGER=brew ;;
+        Linux)
+            PLATFORM=linux
+            [ -r /etc/os-release ] || fail 'Cannot detect Linux distribution.'
+            . /etc/os-release
+            case "${ID:-}" in
+                ubuntu|debian) MANAGER=apt ;;
+                arch) MANAGER=pacman ;;
+                *) fail "Unsupported Linux distribution: ${ID:-unknown}" ;;
+            esac
+            ;;
+        *) fail 'Supported systems: macOS, Ubuntu, Debian and Arch Linux.' ;;
+    esac
+}
+
+applies_to_platform() {
+    [ "$1" = all ] || [ "$1" = "$PLATFORM" ]
+}
+
+resolve_destination() {
+    case "$1" in
+        home:*) printf '%s/%s\n' "$HOME" "${1#home:}" ;;
+        config:*) printf '%s/%s\n' "$CONFIG_HOME" "${1#config:}" ;;
+        *) fail "Unknown destination prefix: $1" ;;
+    esac
+}
+
+destination_is_in_repository() {
+    local parent
+    parent=$(dirname "$1")
+    while [ ! -d "$parent" ]; do
+        [ "$parent" != / ] || return 1
+        parent=$(dirname "$parent")
+    done
+    parent=$(cd "$parent" && pwd -P)
+    case "$parent/" in
+        "$ROOT/"*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+backup_destination() {
+    local destination=$1 key=$2 backup
+    if [ -z "$BACKUP_ROOT" ]; then
+        mkdir -p "$STATE_HOME/dotfiles/backups"
+        BACKUP_ROOT=$(mktemp -d "$STATE_HOME/dotfiles/backups/$(date +%Y%m%d-%H%M%S).XXXXXX")
+    fi
+    backup="$BACKUP_ROOT/$key"
+    mkdir -p "$(dirname "$backup")"
+    mv "$destination" "$backup"
+    printf 'BACKUP %s -> %s\n' "$destination" "$backup"
+}
+
+. "$ROOT/scripts/lib/links.sh"
+. "$ROOT/scripts/lib/packages.sh"
+. "$ROOT/scripts/lib/repositories.sh"
+
+COMMAND=${1:-help}
+[ "$#" -eq 0 ] || shift
+if [ "$#" -gt 0 ]; then
+    [ "$#" -eq 1 ] && [ "$1" = --backup ] || fail 'Unknown arguments. Use help.'
+    case "$COMMAND" in
+        link|repositories|install) BACKUP=true ;;
+        *) fail '--backup is only supported by link, repositories and install.' ;;
+    esac
+fi
+case "$COMMAND" in
+    help|-h|--help) usage; exit 0 ;;
+    plan|check|link|packages|casks|repositories|update-repositories|install) ;;
+    *) fail "Unknown command: $COMMAND" ;;
+esac
+
+case "$HOME:$CONFIG_HOME:$STATE_HOME" in
+    /*:/*:/*) ;;
+    *) fail 'HOME, XDG_CONFIG_HOME and XDG_STATE_HOME must be absolute paths.' ;;
+esac
+detect_platform
+case "$COMMAND" in
+    plan)
+        printf 'Platform: %s; package manager: %s\n\n' "$PLATFORM" "$MANAGER"
+        inspect_links plan
+        printf '\nCLI packages (%s):\n' "$MANAGER"
+        while IFS= read -r package || [ -n "$package" ]; do
+            case "$package" in ''|'#'*) continue ;; esac
+            printf '  %s\n' "$package"
+        done < "$ROOT/manifests/packages/$MANAGER.txt"
+        printf '\nGit repositories:\n'
+        plan_repositories
+        ;;
+    check) inspect_links check ;;
+    link) install_links ;;
+    packages) install_packages ;;
+    casks) install_casks ;;
+    repositories) install_repositories ;;
+    update-repositories) update_repositories ;;
+    install)
+        # Check conflicts before installing packages or cloning anything.
+        inspect_links preflight || fail 'Resolve link conflicts first, or use --backup.'
+        inspect_repositories
+        install_links
+        install_packages
+        install_repositories
+        ;;
+esac

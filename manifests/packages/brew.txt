@@ -1,0 +1,16 @@
+# CLI tools. GUI applications are opt-in through macos-casks.txt.
+curl
+eza
+fzf
+gh
+git
+git-delta
+gum
+lazygit
+lsof
+neovim
+openssh
+ripgrep
+starship
+tmux
+zsh

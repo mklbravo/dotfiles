@@ -1,0 +1,4 @@
+# name	url	destination	platform
+neovim	https://github.com/mklbravo/nvim-config.git	config:nvim	all
+oh-my-zsh	https://github.com/ohmyzsh/ohmyzsh.git	home:.oh-my-zsh	all
+tpm	https://github.com/tmux-plugins/tpm.git	home:.tmux/plugins/tpm	all
