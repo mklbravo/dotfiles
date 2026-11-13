@@ -1,0 +1,12 @@
+# Optional macOS applications; never installed by the install command.
+docker
+fantastical
+forklift
+ghostty
+moom
+obsidian
+raycast
+spotify
+tableplus
+telegram
+viscosity

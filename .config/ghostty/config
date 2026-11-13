@@ -1,0 +1,9 @@
+cursor-style = bar
+custom-shader = "./shaders/cursor.glsl"
+font-size = 13
+keybind = alt+backspace=text:\x1b\x7f
+link-url = true
+macos-titlebar-style = tabs
+theme = "TokyoNight"
+window-padding-x=7
+window-padding-y=7

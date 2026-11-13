@@ -1,0 +1,13 @@
+# source (relative to repository)	destination	platform
+.zshrc	home:.zshrc	all
+.zlogin	home:.zlogin	all
+.gitconfig	home:.gitconfig	all
+.gitignore	home:.gitignore	all
+.ssh/config	home:.ssh/config	all
+.tmux.conf	home:.tmux.conf	all
+.oh-my-zsh/custom/aliases.zsh	config:zsh/custom/aliases.zsh	all
+.oh-my-zsh/custom/functions.zsh	config:zsh/custom/functions.zsh	all
+.config/starship.toml	config:starship.toml	all
+.config/ghostty	config:ghostty	all
+Library/Application Support/lazygit/config.yml	home:Library/Application Support/lazygit/config.yml	macos
+Library/Application Support/lazygit/config.yml	config:lazygit/config.yml	linux
