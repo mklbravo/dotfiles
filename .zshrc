@@ -26,12 +26,17 @@ else
     export EDITOR=vi
 fi
 
-plugins=(git vi-mode)
+plugins=(
+    git
+    vi-mode
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+
+[[ "$OSTYPE" == linux* && -f /etc/arch-release ]] && plugins+=(archlinux)
 command -v docker >/dev/null 2>&1 && plugins+=(docker docker-compose)
 command -v tmux >/dev/null 2>&1 && plugins+=(tmux)
 command -v tmuxinator >/dev/null 2>&1 && plugins+=(tmuxinator)
-[[ ! -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]] || plugins+=(zsh-autosuggestions)
-[[ ! -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh" ]] || plugins+=(zsh-syntax-highlighting)
 
 # Dependency updates are explicit through the dotfiles installer.
 zstyle ':omz:update' mode disabled
